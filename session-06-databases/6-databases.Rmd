@@ -50,7 +50,7 @@ background-color: #2f1a61;
 ```
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
-
+library(pacman)
 pacman::p_load(tidyverse, purrr, dp)
 ```
 
@@ -102,6 +102,10 @@ library(nycflights13)
 # flights 
 # planes
 # airlines
+library(dplyr)
+library(DBI)
+library(ggplot2)
+
 ```
 
 Let's perform a [left join](https://stat545.com/bit001_dplyr-cheatsheet.html#left_joinsuperheroes-publishers) on the flights and planes datasets. - *Note*: I'm going subset columns after the join, but only to keep text on the slide.
@@ -170,6 +174,16 @@ b) Which airline has the most flights with unregistered planes?
 :::
 
 ```{r}
+#a 
+flights <- flights
+
+flights %>% anti_join(planes, by = tailnum)
+  count()
+
+#b
+flights %>% anti_join(planes, by = tailnum) %>% 
+  count(carrier, sort = TRUE) %>% 
+  left_join(airlines, by = carrier)
 
 ```
 
@@ -232,7 +246,7 @@ To avoid all this hassle, we will create and host our own (small) database in ou
 We then **save** the database connection and store it in the object `con` for further use in exploring and querying data.
 
 ```{r}
-# set up connection with DBI and RSQLite
+# DATABASE CONNECTION STORED HERE -- set up connection with DBI and RSQLite
 con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 ```
 
@@ -408,6 +422,15 @@ b) Add the `airports` table to the database with the appropriate index.
 :::
 
 ```{r}
+#View(airports)
+copy_to(
+  dest = con,
+  df = airports,
+  name = "airports",
+  temporary = FALSE,
+  indexes = "faa"
+)
+
 
 ```
 
@@ -523,7 +546,15 @@ b) Collect the results into a local dataframe.
 :::
 
 ```{r}
+#a
+airlines_db <-tbl(con, "airlines") %>% 
+left_join(flights_db,by = "carrier") %>% 
+  filter(month == 1 & day == 1) %>% 
+  select(carrier, name, flight)
 
+#b
+jan_flights_local <- airlines_db %>% collect()
+jan_flights_local
 ```
 
 
@@ -545,7 +576,7 @@ If you want to learn more about writing SQL with `dbplyr`, check out `vignette('
 
 ## Disconnect from database
 
-When you are done with your SQL queries, it is a good idea to disconnect from the database. This becomes increasingly important if you work with servers that charge you for their services!
+ALWAYS DISCONNECT !!!!!!!!! When you are done with your SQL queries, it is a good idea to disconnect from the database. This becomes increasingly important if you work with servers that charge you for their services!
 
 ```{r}
 DBI::dbDisconnect(con)
