@@ -612,26 +612,18 @@ If you are looking for an alternative way to present your results, you might als
 Again, `modelsummary` provides a very accessible function for this: `modelplot()`. As with the regression table, you input the `r colorise("Model List", "red")` and not the tidied output. The tidying happens under the hood.
 
 ```{r, fig.align='center', echo=T, out.width = "70%"}
-# to avoid overplotting, we define a smaller list of models
-models <- list(
-  "Bivariate OLS" = lm(life_expectancy ~ gdp, data = life_expec_dat),
-  "Multivariate OLS" = lm(life_expectancy ~ gdp + total_expenditure + population + alcohol + bmi, data = life_expec_dat),
-  "Interaction" = lm(life_expectancy ~  gdp + total_expenditure + population + gdp*total_expenditure, data = life_expec_dat),
-  "Polynomial" = lm(life_expectancy ~ gdp + I(gdp^2), data = life_expec_dat)
-)
-
 # plot 
-modelsummary::modelplot(models, coef_omit = "Intercept") 
+modelsummary::modelplot(multiv_model_out[29:31], coef_omit = "Intercept") 
 ```
 
 Now we just need to customize the plot to our liking:
 
 ```{r, fig.align='center', echo=T, out.width = "70%"}
-modelsummary::modelplot(models, coef_omit = "Intercept") +
+modelsummary::modelplot(multiv_model_out[29:31], coef_omit = "Intercept") +
   labs(x = 'Coefficients', 
        y = 'Term names',
        title = 'Linear regression models of "Life expectancy"',
-       caption = "Comparing multiple models, the data originated at the WHO") 
+       caption = "Comparing multiple models of life expectancy at the country level, data originated at the WHO") 
 ```
 
 We will cover data visualization with R in much greater detail in the next session, so hopefully the section on **coefficient plot** will be made clearer then!
