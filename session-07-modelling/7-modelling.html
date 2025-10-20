@@ -1744,6 +1744,8 @@ margin-left: 0 !important;
           <li><a href="#a-more-explicit-way-to-create-formulas" id="toc-a-more-explicit-way-to-create-formulas">A More
           Explicit Way to Create Formulas</a></li>
           <li><a href="#iteration" id="toc-iteration">Iteration</a></li>
+          <li><a href="#excercise-2" id="toc-excercise-2">Excercise
+          2</a></li>
           </ul></li>
           <li><a href="#specification-curve-analysis" id="toc-specification-curve-analysis">Specification Curve
           Analysis ⤴️</a></li>
@@ -1917,8 +1919,8 @@ variable, or target variable, depending on context.The right-hand side,
 often written as X, may be referred to as the independent variables,
 explanatory variables, or regressors. These terms have subtle
 differences in meaning depending on the context, but for our purposes
-it’s enough to know that they all refer to one of the two sides of a
-regression equation.</p>
+today it’s enough to know that they all refer to one of the two sides of
+a regression equation.</p>
 </div>
 <div id="syntax" class="section level2">
 <h2>Syntax</h2>
@@ -1969,12 +1971,12 @@ doing it directly.</p>
 formulas that perform the following regressions, in each case run the
 model and inspect the output:</p>
 <ul>
-<li><p>regresses <code>life_expectancy</code> on <code>gdp</code>,
+<li><p>Regress <code>life_expectancy</code> on <code>gdp</code>,
 <code>population</code>, and <code>alcohol</code></p></li>
-<li><p>regresses <code>life_expectancy</code> on <code>gdp</code>,
+<li><p>Regress <code>life_expectancy</code> on <code>gdp</code>,
 <code>population</code>, <code>alcohol</code>, and the interaction
 between <code>gdp</code> and <code>population</code></p></li>
-<li><p>regresses <code>life_expectancy</code> on <code>gdp</code>, the
+<li><p>Regress <code>life_expectancy</code> on <code>gdp</code>, the
 square of <code>gdp</code> and the log of
 <code>population</code></p></li>
 </ul>
@@ -2129,6 +2131,15 @@ combinations in one go:</p>
 <span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co"># check whether we have the correct number of models</span></span>
 <span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="fu">length</span>(multiv_model_out)</span></code></pre></div>
 <pre><code>## [1] 31</code></pre>
+</div>
+<div id="excercise-2" class="section level2 alert-danger pad-box">
+<h2>Excercise 2</h2>
+<p>Look at the <code>multiv_model_out</code> object that you have just
+created. Try to get a sense of the structure of the output. Pick three
+different models and inspect their output using the
+<code>summary()</code> function. Consider which model you think is
+“best” and why.</p>
+</div>
 <p>As you can see, the function introduced in the lecture is quite
 powerful, but it is by no means the only option for testing multiple
 model specifications. Depending on the type of analysis that you plan to
@@ -2137,7 +2148,6 @@ of regression models with just a few lines of code. For example, the we
 can perform <a href="https://cran.r-project.org/web/packages/fixest/vignettes/multiple_estimations.html">multiple
 estimations with the <code>fixest</code> package</a>.</p>
 <hr />
-</div>
 </div>
 <div id="specification-curve-analysis" class="section level1">
 <h1>Specification Curve Analysis ⤴️</h1>
@@ -2179,7 +2189,7 @@ ingredients” for each model parameter:</p>
 ## 
 ##   function (x) 
 ## broom::tidy(x, conf.int = TRUE)
-## &lt;environment: 0x0000021d27e33958&gt;
+## &lt;environment: 0x0000012eda638e80&gt;
 ## 
 ## 
 ## Head of specifications table (first 20 rows):</code></pre>
@@ -2487,9 +2497,8 @@ Therefore, we will cover both here.</p>
 <h2>Using Regression Tables</h2>
 <p>The workhorse function in <code>modelsummary</code> is unsurprisingly
 <code>modelsummary()</code>. 🤔</p>
-<p>Here we only need to input the
-<code>modelsummary(&quot;models_list&quot;)</code> as the function does all of the
-tidying for us.</p>
+<p>Here we only need to input the <span style="color: red;">models
+list</span> as the function does all of the tidying for us.</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>modelsummary<span class="sc">::</span><span class="fu">modelsummary</span>(multiv_model_out[<span class="dv">29</span><span class="sc">:</span><span class="dv">31</span>], </span>
 <span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>                           <span class="at">output =</span> <span class="st">&quot;kableExtra&quot;</span>,</span>
 <span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a>                           <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="co"># can be set to multiple different output formats (see the documentation for more information)</span></span></code></pre></div>
@@ -3479,7 +3488,7 @@ RMSE
 </tbody>
 </table>
 <div class="alert-info pad-box">
-<p><strong>Excercise 2</strong> Our implementation of
+<p><strong>Excercise 3</strong> Our implementation of
 <code>modelsummary</code> above is good, but it can be improved further.
 Using the code chunk above as a starting point, try to: - Switch to
 using significant digits instead of fixed decimal places so that gdp and

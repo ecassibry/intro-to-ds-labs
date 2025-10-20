@@ -150,7 +150,7 @@ Running a model with a formula is straightforward. Note that we don't even have 
 lm(life_expectancy ~ gdp, data = life_expec_dat)
 ```
 
-Note: Both sides of this equation go by many names. The left-hand side, often written as y, may be called the dependent variable, response variable, or target variable, depending on context.The right-hand side, often written as X, may be referred to as the independent variables, explanatory variables, or regressors. These terms have subtle differences in meaning depending on the context, but for our purposes it’s enough to know that they all refer to one of the two sides of a regression equation.
+Note: Both sides of this equation go by many names. The left-hand side, often written as y, may be called the dependent variable, response variable, or target variable, depending on context.The right-hand side, often written as X, may be referred to as the independent variables, explanatory variables, or regressors. These terms have subtle differences in meaning depending on the context, but for our purposes today it’s enough to know that they all refer to one of the two sides of a regression equation.
 
 ## Syntax
 
@@ -201,11 +201,11 @@ reg1$coefficients == reg2$coefficients
 **Excercise 1**
 Using the two-step approach, create formulas that perform the following regressions, in each case run the model and inspect the output:
 
-- regresses `life_expectancy` on `gdp`, `population`, and `alcohol`
+- Regress `life_expectancy` on `gdp`, `population`, and `alcohol`
 
-- regresses `life_expectancy` on `gdp`, `population`, `alcohol`, and the interaction between `gdp` and `population`
+- Regress `life_expectancy` on `gdp`, `population`, `alcohol`, and the interaction between `gdp` and `population`
 
-- regresses `life_expectancy` on `gdp`, the square of `gdp` and the log of `population`
+- Regress `life_expectancy` on `gdp`, the square of `gdp` and the log of `population`
 
 ```{r, echo= FALSE}
 # your code here
@@ -325,6 +325,15 @@ multiv_model_out <- combn_models(depvar = depvar, covars = covars, data = life_e
 # check whether we have the correct number of models
 length(multiv_model_out)
 ```
+
+:::{.alert-danger .pad-box}
+## Excercise 2
+Look at the `multiv_model_out` object that you have just created. Try to get a sense of the structure of the output. Pick three different models and inspect their output using the `summary()` function. Consider which model you think is "best" and why.
+
+```{r, echo= FALSE}
+# your code here
+```
+:::
 
 As you can see, the function introduced in the lecture is quite powerful, but it is by no means the only option for testing multiple model specifications. Depending on the type of analysis that you plan to perform, certain R packages enable you run many different combinations of regression models with just a few lines of code. For example, the we can perform [multiple estimations with the `fixest` package](https://cran.r-project.org/web/packages/fixest/vignettes/multiple_estimations.html).
 
@@ -528,7 +537,7 @@ One reason that we like this package is that it combines both approaches of pres
 
 The workhorse function in `modelsummary` is unsurprisingly `modelsummary()`. `r emo::ji("thinking")`
 
-Here we only need to input the `modelsummary("models_list")` as the function does all of the tidying for us.
+Here we only need to input the `r colorise("models list", "red")` as the function does all of the tidying for us.
 
 ```{r}
 modelsummary::modelsummary(multiv_model_out[29:31], 
@@ -592,7 +601,7 @@ mod_table |>
 ```
 
 :::{.alert-info .pad-box}
-**Excercise 2**
+**Excercise 3**
 Our implementation of `modelsummary` above is good, but it can be improved further. Using the code chunk above as a starting point, try to:
 - Switch to using significant digits instead of fixed decimal places so that gdp and percent_expenditure are interpretable.
 - Add a note at the bottom of the table indicating that the data originated at the WHO.

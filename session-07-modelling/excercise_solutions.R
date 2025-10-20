@@ -20,6 +20,12 @@ reg3 <- lm(formula3, data = life_expec_dat)
 summary(reg3)
 
 # Excercise 2
+
+summary(multiv_model_out[[10]])
+summary(multiv_model_out[[25]])
+summary(multiv_model_out[[31]])
+
+# Excercise 3
 mod_table <- modelsummary::modelsummary(multiv_model_out[29:31], 
                                         output = "kableExtra",
                                         fmt = fmt_significant(2),  # 2 significant digits instead of fixed decimal places
