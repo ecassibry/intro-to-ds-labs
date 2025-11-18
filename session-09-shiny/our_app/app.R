@@ -13,13 +13,16 @@ db <- dplyr::src_sqlite("movies.db")
 omdb <- dplyr::tbl(db, "omdb")
 tomatoes <- dplyr::tbl(db, "tomatoes")
 
+#use SQL demands to look at full database!!! 
+
 # Join tables, filtering out those with <10 reviews, and select specified columns
 all_movies <- dplyr::inner_join(omdb, tomatoes, by = "ID") %>%
   dplyr::filter(Reviews >= 10) %>%
+  #Question 3.1: adding in Genre to selected columns
   dplyr::select(ID, imdbID, Title, Year, Rating_m = Rating.x, Runtime, Released,
                 Director, Writer, imdbRating, imdbVotes, Language, Country, Oscars,
                 Rating = Rating.y, Meter, Reviews, Fresh, Rotten, userMeter, userRating, userReviews,
-                BoxOffice, Production, Cast)
+                BoxOffice, Production, Cast, Genre)
 
 # Variables that can be put on the x and y axes
 axis_vars <- c(
@@ -30,6 +33,8 @@ axis_vars <- c(
   "Year" = "Year",
   "Length (minutes)" = "Runtime"
 )
+
+
 
 # Custom Function ---------------------------------------------------------
 
@@ -64,7 +69,9 @@ ui <- fluidPage(
              sliderInput("boxoffice", "Dollars at Box Office (millions)",
                          0, 800, c(0, 800), step = 1),
              textInput("director", "Director name contains (e.g., Miyazaki)"),
-             textInput("cast", "Cast names contains (e.g. Tom Hanks)")
+             textInput("cast", "Cast names contains (e.g. Tom Hanks)"),
+             #Question 3.2: filter by genre 
+             textInput("genre", "Genre name contains (e.g. Drama)")
            ),
            
            # Plot axis selector
@@ -126,10 +133,17 @@ server <- function(input, output, session) {
       director <- paste0("%", input$director, "%")
       m <- m %>% filter(Director %like% director)
     }
+    
     # Optional: filter by cast member
     if (!is.null(input$cast) && input$cast != "") {
       cast <- paste0("%", input$cast, "%")
       m <- m %>% filter(Cast %like% cast)
+    }
+    
+    #Question 3.3: filter by Genre
+    if (!is.null(input$genre) && input$genre != "") {
+      genre <- paste0("%", input$genre, "%")
+      m <- m %>% filter(Genre %like% genre)
     }
     
     # return m
@@ -171,6 +185,7 @@ server <- function(input, output, session) {
       aes_string(
         x = input$xvar,
         y = input$yvar,
+        size = "BoxOffice",
         fill = "has_oscar",
         colour = "has_oscar",
         text = "paste0(
@@ -180,10 +195,14 @@ server <- function(input, output, session) {
       )"
       )
     ) +
+      #Question 2: turn into a bubble plot with bubbles relating to box office: 
       geom_point(shape = 21, alpha = 0.7) +
+      scale_size(range = c(1,15), name = "Box Office", guide = "none") + #guide none removes the title of the key (was irrelevant here)
       scale_fill_manual(values = c("Yes" = "orange", "No" = "gray"),name = "Won an Oscar") +
       scale_color_manual(values = c("Yes" = "orange", "No" = "gray"),guide = "none") +
       labs(
+        #Question 1: Add an interactive title
+        title = paste("IDS Movies: ", xvar_name), 
         x = xvar_name,
         y = yvar_name
       ) +
